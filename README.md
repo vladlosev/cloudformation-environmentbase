@@ -79,6 +79,15 @@ standard by adding a @classarg identifier that indicates that a given method
 utilizes an argument that's passed in via the class constructor along with the
 type and description of that parameter.
 
+Once subclassed, you can run the new class by running:
+
+```bash
+python elkstack.py create
+```
+
+This will create a new environmentbase.template file that you can upload to
+Cloudformation and deploy.
+
 ## Command Line Usage
 
 To use this script, you must install some requirements (listed  [here](https://github.com/DualSpark/cloudformation-environmentbase/blob/master/setup.py#L64))
@@ -164,4 +173,3 @@ A Microsoft Word-formatted version of this documentation.
 ### README.md
 
 This file--documentation for usage of this set of scripts and files.
-
