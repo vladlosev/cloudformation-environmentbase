@@ -42,6 +42,8 @@ class RDS(Template):
                 'rds_user_name': 'str',
                 'master_db_name': 'str',
                 'volume_size': 'int',
+                'storage_type': 'str',
+                'iops': 'int',
                 'backup_retention_period': 'int',
                 'rds_engine': 'str',
                 'rds_engine_version': 'str',
@@ -174,6 +176,8 @@ class RDS(Template):
             rds_instance = self.add_resource(rds.DBInstance(
                 db_label.lower() + self.tier_name.title() + 'RdsInstance',
                 AllocatedStorage=db_config.get('volume_size', '100'),
+                StorageType=db.config.get('sotrage_type', 'standard'),
+                Iops=db.config.get('iops', 1000),
                 BackupRetentionPeriod=db_config.get('backup_retention_period', '30'),
                 DBInstanceClass=Ref(db_instance_type),
                 DBName=Ref(db_name),
