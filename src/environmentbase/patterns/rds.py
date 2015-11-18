@@ -170,10 +170,15 @@ class RDS(Template):
                     GroupDescription='Security group for %s RDS tier' % self.tier_name.lower(),
                     VpcId=Ref(self.vpc_id))
             )
+            
+            kwargs = {}
+            if 'iops' in db_config:
+                kwargs['Iops'] = db_config['iops']
 
             rds_instance = self.add_resource(rds.DBInstance(
                 db_label.lower() + self.tier_name.title() + 'RdsInstance',
                 AllocatedStorage=db_config.get('volume_size', '100'),
+                StorageType=db_config.get('storage_type', 'standard'),
                 BackupRetentionPeriod=db_config.get('backup_retention_period', '30'),
                 DBInstanceClass=Ref(db_instance_type),
                 DBName=Ref(db_name),
@@ -185,7 +190,8 @@ class RDS(Template):
                 MasterUserPassword=Ref(db_user_password),
                 PreferredBackupWindow=db_config.get('preferred_backup_window', '02:00-02:30'),
                 PreferredMaintenanceWindow=db_config.get('preferred_maintenance_window', 'sun:03:00-sun:04:00'),
-                MultiAZ=True))
+                MultiAZ=True,
+                **kwargs))
 
             # Set the snapshot id if provided (and null out the db name to avoid cfn error)
             if db_config['snapshot_id']:
