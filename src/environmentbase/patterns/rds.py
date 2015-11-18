@@ -174,11 +174,12 @@ class RDS(Template):
             kwargs = {}
             if 'iops' in db_config:
                 kwargs['Iops'] = db_config['iops']
+            if 'storage_type' in db_config:
+                kwargs['StorageType'] = db_config['storage_type']
 
             rds_instance = self.add_resource(rds.DBInstance(
                 db_label.lower() + self.tier_name.title() + 'RdsInstance',
                 AllocatedStorage=db_config.get('volume_size', '100'),
-                StorageType=db_config.get('storage_type', 'standard'),
                 BackupRetentionPeriod=db_config.get('backup_retention_period', '30'),
                 DBInstanceClass=Ref(db_instance_type),
                 DBName=Ref(db_name),
