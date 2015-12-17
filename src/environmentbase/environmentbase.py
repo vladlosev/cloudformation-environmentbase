@@ -197,7 +197,7 @@ class EnvironmentBase(object):
                 is_successful = True
                 print "Successfully issued create stack command for %s\n" % stack_name
             except botocore.exceptions.ClientError as create_error:
-                logging.error("Create failed: \n\n{!e}\n".format(create_error))
+                logging.error("Create failed: \n\n{!s}\n".format(create_error))
                 # Raise update_error because that one is more likely to explain why the 
                 # entire operation failed. 
                 raise update_error
