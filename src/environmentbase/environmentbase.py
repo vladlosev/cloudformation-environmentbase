@@ -26,7 +26,7 @@ except ImportError:
 # If you run into compatibility issues, use the regular json library instead:
 import json as pure_json
 
-TIMEOUT = 60
+TIMEOUT = 600
 TEMPLATES_PATH = 'templates'
 
 
