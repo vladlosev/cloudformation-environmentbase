@@ -155,8 +155,6 @@ class EnvironmentBase(object):
         if os.path.isfile(cfn_template_filename):
             with open(cfn_template_filename, 'r') as cfn_template_file:
                 cfn_template = cfn_template_file.read()
-            white_space = re.compile(r'\s+')
-            cfn_template = re.sub(white_space, ' ', cfn_template)
         else:
             raise ValueError('Template at: %s not found\n' % cfn_template_filename)
 
