@@ -172,7 +172,7 @@ class EnvironmentBase(object):
         cfn_template = self._load_template()
         cfn_conn = utility.get_boto_client(self.config, 'cloudformation')
         try:
-            stack_url = self.upload_template(template)
+            stack_url = self.upload_template(cfn_template)
             cfn_conn.update_stack(
                 StackName=stack_name,
                 TemplateURL=stack_url,
