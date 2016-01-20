@@ -168,7 +168,7 @@ class EnvironmentBase(object):
             notification_arns.append(sns_topic.arn)
 
         cfn_template = self._load_template()
-        stack_url = self.upload_template(json.loads(cfn_template))
+        stack_url = self.upload_template(pure_json.loads(cfn_template))
         cfn_conn = utility.get_boto_client(self.config, 'cloudformation')
         try:
             cfn_conn.update_stack(
