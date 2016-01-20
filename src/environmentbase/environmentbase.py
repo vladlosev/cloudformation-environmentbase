@@ -116,6 +116,15 @@ class EnvironmentBase(object):
             reloaded_template = pure_json.loads(raw_json)
             pure_json.dump(reloaded_template, output_file, indent=4, separators=(',', ':'))
 
+        stack_url = self.upload_template(self.template)
+        url_file_path = self._ensure_template_dir_exists('main_template_url')
+        with open(url_file_path, 'w') as url_file:
+            url_file.write(stack_url)
+            
+    def _load_template_stack_url(self):
+        url_file_path = self._ensure_template_dir_exists('main_template_url')
+        return open(url_file_path).readline().rstrip('\n')
+
     def estimate_cost(self, template_name=None, stack_params=None):
         template_body = self._load_template(template_name)
         # Get url to cost estimate calculator
@@ -167,10 +176,7 @@ class EnvironmentBase(object):
         if sns_topic:
             notification_arns.append(sns_topic.arn)
 
-        cfn_template = self._load_template()
-        template_json = pure_json.loads(cfn_template)
-        template_json.name = stack_name
-        stack_url = self.upload_template(template_json)
+        stack_url = self._load_template_stack_url()
         cfn_conn = utility.get_boto_client(self.config, 'cloudformation')
         try:
             cfn_conn.update_stack(
