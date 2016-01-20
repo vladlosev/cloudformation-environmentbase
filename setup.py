@@ -66,7 +66,7 @@ setup(
         "troposphere==1.1.2",
         "jmespath==0.7.1",
         "boto>=2.38.0",
-        "botocore==1.1.1",
+        "botocore>=1.1.1",
         "boto3>=1.1.0",
         "ipcalc==1.1.2",
         "docopt==0.6.2",
