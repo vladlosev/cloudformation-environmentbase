@@ -116,6 +116,15 @@ class EnvironmentBase(object):
             reloaded_template = pure_json.loads(raw_json)
             pure_json.dump(reloaded_template, output_file, indent=4, separators=(',', ':'))
 
+        stack_url = self.upload_template(self.template)
+        url_file_path = self._ensure_template_dir_exists('main_template_url')
+        with open(url_file_path, 'w') as url_file:
+            url_file.write(stack_url)
+            
+    def _load_template_stack_url(self):
+        url_file_path = self._ensure_template_dir_exists('main_template_url')
+        return open(url_file_path).readline().rstrip('\n')
+
     def estimate_cost(self, template_name=None, stack_params=None):
         template_body = self._load_template(template_name)
         # Get url to cost estimate calculator
@@ -155,8 +164,6 @@ class EnvironmentBase(object):
         if os.path.isfile(cfn_template_filename):
             with open(cfn_template_filename, 'r') as cfn_template_file:
                 cfn_template = cfn_template_file.read()
-            white_space = re.compile(r'\s+')
-            cfn_template = re.sub(white_space, ' ', cfn_template)
         else:
             raise ValueError('Template at: %s not found\n' % cfn_template_filename)
 
@@ -169,12 +176,12 @@ class EnvironmentBase(object):
         if sns_topic:
             notification_arns.append(sns_topic.arn)
 
-        cfn_template = self._load_template()
+        stack_url = self._load_template_stack_url()
         cfn_conn = utility.get_boto_client(self.config, 'cloudformation')
         try:
             cfn_conn.update_stack(
                 StackName=stack_name,
-                TemplateBody=cfn_template,
+                TemplateURL=stack_url,
                 Parameters=stack_params,
                 NotificationARNs=notification_arns,
                 Capabilities=['CAPABILITY_IAM'])
@@ -188,7 +195,7 @@ class EnvironmentBase(object):
             try:
                 cfn_conn.create_stack(
                     StackName=stack_name,
-                    TemplateBody=cfn_template,
+                    TemplateURL=stack_url,
                     Parameters=stack_params,
                     NotificationARNs=notification_arns,
                     Capabilities=['CAPABILITY_IAM'],
