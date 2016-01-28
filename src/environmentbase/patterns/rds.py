@@ -29,7 +29,8 @@ class RDS(Template):
                 # Note: 'master_db_name' value will be overridden if snapshot_id is non-empty
                 'snapshot_id': '',
                 # Empty string is ignored, requiring manual parameter binding instead
-                'password': 'changeme'
+                'password': 'changeme',
+                'multi_az': True
             }
         }
     }
@@ -191,7 +192,7 @@ class RDS(Template):
                 MasterUserPassword=Ref(db_user_password),
                 PreferredBackupWindow=db_config.get('preferred_backup_window', '02:00-02:30'),
                 PreferredMaintenanceWindow=db_config.get('preferred_maintenance_window', 'sun:03:00-sun:04:00'),
-                MultiAZ=True,
+                MultiAZ=db_config.get('multi_az', True),
                 **kwargs))
 
             # Set the snapshot id if provided (and null out the db name to avoid cfn error)
